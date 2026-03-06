@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:mso="urn:schemas-microsoft-com:office:office" xmlns:msdt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882">
+<head>
+  <meta charset="UTF-8" />
+  <title>Task List v11</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f5f5f5;
+    }
+
+    .navbar {
+      background: #1f3b5b;
+      color: #fff;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .navbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .navbar-title {
+      font-size: 18px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .navbar-search {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .search-input,
+    .filter-input {
+      padding: 4px 6px;
+      font-size: 13px;
+    }
+
+    .search-input {
+      min-width: 180px;
+    }
+
+    .filter-input {
+      min-width: 140px;
+    }
+
+    .date-range {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .date-range label {
+      font-size: 12px;
+    }
+
+    .date-range input[type="date"] {
+      font-size: 12px;
+      padding: 2px 4px;
+    }
+
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .action-select {
+      font-size: 13px;
+      padding: 4px 6px;
+    }
+
+    .apply-action-btn {
+      display: none;
+      font-size: 13px;
+      padding: 4px 10px;
+      background: #ffc107;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      color: #000;
+    }
+
+    .add-section-btn {
+      font-size: 13px;
+      padding: 4px 10px;
+      background: #4caf50;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      color: #fff;
+    }
+
+    h1 {
+      margin: 12px 16px 4px 16px;
+    }
+
+    .page-container {
+      padding: 0 16px 16px 16px;
+    }
+
+    .category-section {
+      background: #ffffff;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      border: 1px solid #ddd;
+      overflow: hidden;
+    }
+
+    .category-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: #e9f2ff;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .category-header-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .category-title {
+      font-weight: bold;
+    }
+
+    .toggle-icon {
+      font-weight: bold;
+      width: 18px;
+      text-align: center;
+    }
+
+    .category-header-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .new-task-btn {
+      font-size: 12px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: none;
+      background: #4caf50;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .category-content {
+      padding: 0 12px 12px 12px;
+      display: block;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      background: #fff;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 6px 8px;
+      font-size: 13px;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f0f0f0;
+    }
+
+    .main-task-row {
+      background: #fafafa;
+    }
+
+    .subtask-row {
+      background: #ffffff;
+    }
+
+    .subtask-row td {
+      font-size: 12px;
+      padding-left: 24px;
+    }
+
+    .add-subtask-btn {
+      cursor: pointer;
+      background: #4caf50;
+      border: none;
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 3px;
+      font-size: 12px;
+    }
+
+    .inline-input {
+      width: 95%;
+      box-sizing: border-box;
+      font-size: 12px;
+    }
+
+    .inline-select {
+      font-size: 12px;
+    }
+
+    .inline-date {
+      font-size: 12px;
+    }
+
+    .inline-save-btn,
+    .inline-cancel-btn {
+      font-size: 11px;
+      padding: 2px 6px;
+      margin-right: 2px;
+      cursor: pointer;
+      border-radius: 3px;
+      border: 1px solid #888;
+      background: #fff;
+    }
+
+    .inline-save-btn {
+      color: #fff;
+      background: #2196f3;
+      border-color: #2196f3;
+    }
+
+    .inline-cancel-btn {
+      color: #333;
+      background: #eee;
+    }
+
+    .edit-btn {
+      font-size: 11px;
+      padding: 2px 6px;
+      margin-right: 2px;
+      cursor: pointer;
+      border-radius: 3px;
+      border: 1px solid #888;
+      background: #fff;
+    }
+
+    .status-not-started {
+      background-color: #e0e0e0;
+    }
+
+    .status-in-progress {
+      background-color: #ffcc80;
+    }
+
+    .status-blocked {
+      background-color: #d7ccc8;
+    }
+
+    .status-done {
+      background-color: #c8e6c9;
+    }
+
+    .overdue {
+      background-color: #ffcdd2 !important;
+    }
+
+    .hidden-row {
+      display: none;
+    }
+  </style>
+
+<!--[if gte mso 9]><xml>
+<mso:CustomDocumentProperties>
+<mso:_dlc_DocId msdt:dt="string">SJRYVY4QY2VF-1517827325-54708</mso:_dlc_DocId>
+<mso:_dlc_DocIdItemGuid msdt:dt="string">1f3b864b-1569-4dad-b85f-be62a9f71b5a</mso:_dlc_DocIdItemGuid>
+<mso:_dlc_DocIdUrl msdt:dt="string">https://infinitesolny.sharepoint.com/sites/DATA/_layouts/15/DocIdRedir.aspx?ID=SJRYVY4QY2VF-1517827325-54708, SJRYVY4QY2VF-1517827325-54708</mso:_dlc_DocIdUrl>
+</mso:CustomDocumentProperties>
+</xml><![endif]-->
+</head>
+<body>
+  <div class="navbar">
+    <div class="navbar-left">
+      <div class="navbar-title">Task List</div>
+      <div class="navbar-search">
+        <input
+          id="globalSearch"
+          type="text"
+          class="search-input"
+          placeholder="Global search..."
+        />
+        <input
+          id="filterInput"
+          type="text"
+          class="filter-input"
+          placeholder="Filter (owner/status/remarks...)"
+        />
+        <div class="date-range">
+          <label for="fromDate">From:</label>
+          <input id="fromDate" type="date" />
+          <label for="toDate">To:</label>
+          <input id="toDate" type="date" />
+        </div>
+      </div>
+    </div>
+    <div class="navbar-right">
+      <button id="addSectionBtn" class="add-section-btn" title="Add new section">Add Section</button>
+      <select id="actionSelect" class="action-select">
+        <option value="">Action</option>
+        <option value="delete">Delete</option>
+        <option value="done">Mark as Done</option>
+        <option value="email">Email</option>
+        <option value="csv">Export as CSV</option>
+      </select>
+      <button id="applyActionBtn" class="apply-action-btn">Apply</button>
+    </div>
+  </div>
+
+  <h1>All Tasks</h1>
+
+  <div class="page-container">
+    <div id="categoriesContainer"></div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "tasklist_v11_tasks";
+    const CATEGORIES_KEY = "tasklist_v11_categories";
+
+    let FIXED_CATEGORIES = [
+      "GRC",
+      "IAM",
+      "Product Security",
+      "SOC",
+      "AdHoc Security Task"
+    ];
+
+    function loadTasks() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return [];
+      try {
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function loadCategories() {
+      const raw = localStorage.getItem(CATEGORIES_KEY);
+      if (!raw) return FIXED_CATEGORIES;
+      try {
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed : FIXED_CATEGORIES;
+      } catch {
+        return FIXED_CATEGORIES;
+      }
+    }
+
+    function saveTasks() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+    }
+
+    function saveCategories() {
+      localStorage.setItem(CATEGORIES_KEY, JSON.stringify(FIXED_CATEGORIES));
+    }
+
+    let tasks = loadTasks();
+    FIXED_CATEGORIES = loadCategories();
+
+    // date helpers
+    function toDisplayDate(value) {
+      if (!value) return "";
+      // stored as yyyy-mm-dd
+      const parts = value.split("-");
+      if (parts.length !== 3) return value;
+      const [y, m, d] = parts;
+      return `${m.padStart(2, "0")}/${d.padStart(2, "0")}/${y}`;
+    }
+
+    function toStorageDateFromInput(value) {
+      // input[type=date] value is yyyy-mm-dd
+      return value || "";
+    }
+
+    function toStorageDateFromDisplay(value) {
+      // from mm/dd/yyyy -> yyyy-mm-dd
+      if (!value) return "";
+      const parts = value.split("/");
+      if (parts.length !== 3) return "";
+      const [m, d, y] = parts;
+      return `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`;
+    }
+
+    function parseStorageDate(value) {
+      if (!value) return null;
+      const d = new Date(value);
+      return isNaN(d.getTime()) ? null : d;
+    }
+
+    function groupByCategory(allTasks) {
+      const map = {};
+      FIXED_CATEGORIES.forEach(c => { map[c] = []; });
+      allTasks.forEach(t => {
+        if (!map[t.category]) map[t.category] = [];
+        map[t.category].push(t);
+      });
+      return map;
+    }
+
+    function getMainTasks(categoryTasks) {
+      return categoryTasks.filter(t => t.parentId === null);
+    }
+
+    function getSubtasks(allTasks, parentId) {
+      return allTasks.filter(t => t.parentId === parentId);
+    }
+
+    function generateNewId() {
+      let maxId = 0;
+      tasks.forEach(t => { if (t.id > maxId) maxId = t.id; });
+      return maxId + 1;
+    }
+
+    function statusClass(status) {
+      const s = (status || "").toLowerCase();
+      if (s === "not started") return "status-not-started";
+      if (s === "in progress" || s === "in-progress") return "status-in-progress";
+      if (s === "blocked") return "status-blocked";
+      if (s === "done") return "status-done";
+      return "";
+    }
+
+    function isOverdue(task) {
+      const d = parseStorageDate(task.dueDate);
+      if (!d) return false;
+      const today = new Date();
+      const todayMid = new Date(today.toDateString());
+      const status = (task.status || "").toLowerCase();
+      return d < todayMid && status !== "done";
+    }
+
+    function createCategorySection(categoryName, categoryTasks) {
+      const section = document.createElement("div");
+      section.className = "category-section";
+      section.dataset.category = categoryName;
+
+      const header = document.createElement("div");
+      header.className = "category-header";
+
+      const headerLeft = document.createElement("div");
+      headerLeft.className = "category-header-left";
+
+      const toggleIcon = document.createElement("span");
+      toggleIcon.className = "toggle-icon";
+      toggleIcon.textContent = "−";
+
+      const title = document.createElement("span");
+      title.className = "category-title";
+      title.textContent = categoryName;
+
+      headerLeft.appendChild(toggleIcon);
+      headerLeft.appendChild(title);
+
+      const headerRight = document.createElement("div");
+      headerRight.className = "category-header-right";
+
+      const newTaskBtn = document.createElement("button");
+      newTaskBtn.textContent = "New Task";
+      newTaskBtn.className = "new-task-btn";
+      newTaskBtn.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        openNewTaskInlineEditor(categoryName);
+      });
+
+      headerRight.appendChild(newTaskBtn);
+      header.appendChild(headerLeft);
+      header.appendChild(headerRight);
+
+      const content = document.createElement("div");
+      content.className = "category-content";
+
+      header.addEventListener("click", (e) => {
+        if (e.target === newTaskBtn) return;
+        const visible = content.style.display === "block" || content.style.display === "";
+        content.style.display = visible ? "none" : "block";
+        toggleIcon.textContent = visible ? "+" : "−";
+      });
+
+      const table = document.createElement("table");
+      const thead = document.createElement("thead");
+      const headRow = document.createElement("tr");
+
+      const headers = [
+        "Select",
+        "Task Name",
+        "Description",
+        "Owner",
+        "Due Date",
+        "Status",
+        "Remarks",
+        "Monday.com Link",
+        "Update",
+        "+"
+      ];
+
+      headers.forEach(h => {
+        const th = document.createElement("th");
+        th.textContent = h;
+        headRow.appendChild(th);
+      });
+
+      thead.appendChild(headRow);
+      table.appendChild(thead);
+
+      const tbody = document.createElement("tbody");
+
+      const mainTasks = getMainTasks(categoryTasks);
+      mainTasks.forEach(mainTask => {
+        const mainRow = createTaskRow(mainTask, false);
+        tbody.appendChild(mainRow);
+
+        const subtasks = getSubtasks(categoryTasks, mainTask.id);
+        subtasks.forEach(st => {
+          const subRow = createTaskRow(st, true);
+          tbody.appendChild(subRow);
+        });
+      });
+
+      table.appendChild(tbody);
+      content.appendChild(table);
+
+      section.appendChild(header);
+      section.appendChild(content);
+
+      return section;
+    }
+
+    function createTaskRow(task, isSubtask) {
+      const row = document.createElement("tr");
+      row.className = (isSubtask ? "subtask-row " : "main-task-row ") + statusClass(task.status);
+      if (isOverdue(task)) row.classList.add("overdue");
+      row.dataset.taskId = task.id;
+      row.dataset.category = task.category || "";
+      row.dataset.parentId = task.parentId != null ? task.parentId : "";
+      row.dataset.status = task.status || "";
+      row.dataset.owner = task.owner || "";
+      row.dataset.remarks = task.remarks || "";
+      row.dataset.description = task.description || "";
+      row.dataset.taskName = task.taskName || "";
+      row.dataset.dueDate = task.dueDate || "";
+
+      const selectTd = document.createElement("td");
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.className = "task-select-checkbox";
+      checkbox.dataset.taskId = task.id;
+      checkbox.addEventListener("change", () => {
+        handleSelectionCascade(task, checkbox.checked);
+        updateApplyButtonVisibility();
+      });
+      selectTd.appendChild(checkbox);
+      row.appendChild(selectTd);
+
+      const nameTd = document.createElement("td");
+      nameTd.textContent = task.taskName;
+      row.appendChild(nameTd);
+
+      const descTd = document.createElement("td");
+      descTd.textContent = task.description || "";
+      row.appendChild(descTd);
+
+      const ownerTd = document.createElement("td");
+      ownerTd.textContent = task.owner || "";
+      row.appendChild(ownerTd);
+
+      const dueTd = document.createElement("td");
+      dueTd.textContent = toDisplayDate(task.dueDate);
+      row.appendChild(dueTd);
+
+      const statusTd = document.createElement("td");
+      statusTd.textContent = task.status || "";
+      row.appendChild(statusTd);
+
+      const remarksTd = document.createElement("td");
+      remarksTd.textContent = task.remarks || "";
+      row.appendChild(remarksTd);
+
+      const mondayTd = document.createElement("td");
+      if (task.mondayLink) {
+        const a = document.createElement("a");
+        a.href = task.mondayLink;
+        a.target = "_blank";
+        a.textContent = "Link";
+        mondayTd.appendChild(a);
+      }
+      row.appendChild(mondayTd);
+
+      const updateTd = document.createElement("td");
+      const editBtn = document.createElement("button");
+      editBtn.textContent = "Edit";
+      editBtn.className = "edit-btn";
+      editBtn.addEventListener("click", () => {
+        openEditInlineEditor(row, task);
+      });
+      updateTd.appendChild(editBtn);
+      row.appendChild(updateTd);
+
+      const plusTd = document.createElement("td");
+      if (!isSubtask) {
+        const plusBtn = document.createElement("button");
+        plusBtn.textContent = "+";
+        plusBtn.title = "Add subtask";
+        plusBtn.className = "add-subtask-btn";
+        plusBtn.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          openSubtaskInlineEditor(row, task);
+        });
+        plusTd.appendChild(plusBtn);
+      }
+      row.appendChild(plusTd);
+
+      return row;
+    }
+
+    function openSubtaskInlineEditor(mainRow, mainTask) {
+      const tbody = mainRow.parentElement;
+      const nextRow = mainRow.nextElementSibling;
+      if (nextRow && nextRow.classList.contains("inline-editor-row")) return;
+
+      const editorRow = buildInlineEditorRow({
+        label: "Subtask:",
+        onSave: (data) => {
+          const newTask = {
+            id: generateNewId(),
+            category: mainTask.category,
+            taskName: data.taskName || "New Subtask",
+            description: data.description || "",
+            owner: data.owner || "",
+            dueDate: data.dueDate || "",
+            status: data.status || "Not Started",
+            remarks: data.remarks || "",
+            mondayLink: data.mondayLink || "",
+            parentId: mainTask.id
+          };
+          tasks.push(newTask);
+          saveTasks();
+          renderAllCategories();
+        },
+        onCancel: () => editorRow.remove()
+      });
+
+      tbody.insertBefore(editorRow, mainRow.nextElementSibling);
+    }
+
+    function openNewTaskInlineEditor(categoryName) {
+      const section = document.querySelector(
+        `.category-section[data-category="${CSS.escape(categoryName)}"]`
+      );
+      if (!section) return;
+      const tbody = section.querySelector("tbody");
+      if (!tbody) return;
+
+      const existingEditor = tbody.querySelector(".inline-editor-row.new-main-task");
+      if (existingEditor) return;
+
+      const editorRow = buildInlineEditorRow({
+        label: "New Task:",
+        extraClass: "new-main-task",
+        onSave: (data) => {
+          const newTask = {
+            id: generateNewId(),
+            category: categoryName,
+            taskName: data.taskName || "New Task",
+            description: data.description || "",
+            owner: data.owner || "",
+            dueDate: data.dueDate || "",
+            status: data.status || "Not Started",
+            remarks: data.remarks || "",
+            mondayLink: data.mondayLink || "",
+            parentId: null
+          };
+          tasks.push(newTask);
+          saveTasks();
+          renderAllCategories();
+        },
+        onCancel: () => editorRow.remove()
+      });
+
+      tbody.insertBefore(editorRow, tbody.firstChild);
+    }
+
+    function openEditInlineEditor(row, task) {
+      const tbody = row.parentElement;
+      const nextRow = row.nextElementSibling;
+      if (nextRow && nextRow.classList.contains("inline-editor-row")) return;
+
+      const editorRow = buildInlineEditorRow({
+        label: "Edit:",
+        initial: task,
+        onSave: (data) => {
+          task.taskName = data.taskName || task.taskName;
+          task.description = data.description || "";
+          task.owner = data.owner || "";
+          task.dueDate = data.dueDate || "";
+          task.status = data.status || task.status;
+          task.remarks = data.remarks || "";
+          task.mondayLink = data.mondayLink || "";
+          saveTasks();
+          renderAllCategories();
+        },
+        onCancel: () => editorRow.remove()
+      });
+
+      tbody.insertBefore(editorRow, row.nextElementSibling);
+    }
+
+    function openAddSectionEditor() {
+      const container = document.getElementById("categoriesContainer");
+      
+      // Remove existing section editor if any
+      const existingEditor = container.querySelector(".section-editor-row");
+      if (existingEditor) {
+        existingEditor.remove();
+        return;
+      }
+
+      const editorDiv = document.createElement("div");
+      editorDiv.className = "section-editor-row category-section";
+      
+      const editorInput = document.createElement("input");
+      editorInput.type = "text";
+      editorInput.placeholder = "Enter new section name...";
+      editorInput.style.width = "300px";
+      editorInput.style.padding = "8px";
+      editorInput.style.border = "1px solid #ddd";
+      editorInput.style.borderRadius = "4px";
+      editorInput.style.fontSize = "14px";
+      
+      const saveBtn = document.createElement("button");
+      saveBtn.textContent = "Add Section";
+      saveBtn.className = "new-task-btn";
+      saveBtn.style.marginLeft = "10px";
+      
+      const cancelBtn = document.createElement("button");
+      cancelBtn.textContent = "Cancel";
+      cancelBtn.className = "inline-cancel-btn";
+      cancelBtn.style.marginLeft = "5px";
+      
+      const editorHeader = document.createElement("div");
+      editorHeader.style.padding = "12px";
+      editorHeader.style.background = "#fff3cd";
+      editorHeader.style.borderBottom = "1px solid #ddd";
+      editorHeader.appendChild(document.createTextNode("Add New Section: "));
+      editorHeader.appendChild(editorInput);
+      editorHeader.appendChild(saveBtn);
+      editorHeader.appendChild(cancelBtn);
+      
+      editorDiv.appendChild(editorHeader);
+      
+      saveBtn.addEventListener("click", () => {
+        const newCategoryName = editorInput.value.trim();
+        if (newCategoryName && !FIXED_CATEGORIES.includes(newCategoryName)) {
+          FIXED_CATEGORIES.push(newCategoryName);
+          saveCategories();
+          renderAllCategories();
+        }
+      });
+      
+      cancelBtn.addEventListener("click", () => {
+        editorDiv.remove();
+      });
+      
+      editorInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          saveBtn.click();
+        }
+      });
+      
+      container.insertBefore(editorDiv, container.firstChild);
+      editorInput.focus();
+    }
+
+    function buildInlineEditorRow(options) {
+      const {
+        label,
+        initial = {},
+        extraClass = "",
+        onSave,
+        onCancel
+      } = options;
+
+      const editorRow = document.createElement("tr");
+      editorRow.className = "inline-editor-row subtask-row " + extraClass;
+
+      const labelTd = document.createElement("td");
+      labelTd.colSpan = 1;
+      labelTd.textContent = label;
+      editorRow.appendChild(labelTd);
+
+      const nameTd = document.createElement("td");
+      const nameInput = document.createElement("input");
+      nameInput.className = "inline-input";
+      nameInput.placeholder = "Task name";
+      if (initial.taskName) nameInput.value = initial.taskName;
+      nameTd.appendChild(nameInput);
+      editorRow.appendChild(nameTd);
+
+      const descTd = document.createElement("td");
+      const descInput = document.createElement("input");
+      descInput.className = "inline-input";
+      descInput.placeholder = "Description";
+      if (initial.description) descInput.value = initial.description;
+      descTd.appendChild(descInput);
+      editorRow.appendChild(descTd);
+
+      const ownerTd = document.createElement("td");
+      const ownerInput = document.createElement("input");
+      ownerInput.className = "inline-input";
+      ownerInput.placeholder = "Owner";
+      if (initial.owner) ownerInput.value = initial.owner;
+      ownerTd.appendChild(ownerInput);
+      editorRow.appendChild(ownerTd);
+
+      const dueTd = document.createElement("td");
+      const dueInput = document.createElement("input");
+      dueInput.type = "date";
+      dueInput.className = "inline-date";
+      if (initial.dueDate) dueInput.value = initial.dueDate;
+      dueTd.appendChild(dueInput);
+      editorRow.appendChild(dueTd);
+
+      const statusTd = document.createElement("td");
+      const statusSelect = document.createElement("select");
+      statusSelect.className = "inline-select";
+      ["Not Started", "In Progress", "Done", "Blocked"].forEach(s => {
+        const opt = document.createElement("option");
+        opt.value = s;
+        opt.textContent = "s";
+        if (initial.status === s) opt.selected = true;
+        statusSelect.appendChild(opt);
+      });
+      statusTd.appendChild(statusSelect);
+      editorRow.appendChild(statusTd);
+
+      const remarksTd = document.createElement("td");
+      const remarksInput = document.createElement("input");
+      remarksInput.className = "inline-input";
+      remarksInput.placeholder = "Remarks";
+      if (initial.remarks) remarksInput.value = initial.remarks;
+      remarksTd.appendChild(remarksInput);
+      editorRow.appendChild(remarksTd);
+
+      const mondayTd = document.createElement("td");
+      const mondayInput = document.createElement("input");
+      mondayInput.className = "inline-input";
+      mondayInput.placeholder = "Monday.com link";
+      if (initial.mondayLink) mondayInput.value = initial.mondayLink;
+      mondayTd.appendChild(mondayInput);
+      editorRow.appendChild(mondayTd);
+
+      const updateTd = document.createElement("td");
+      const saveBtn = document.createElement("button");
+      saveBtn.textContent = "Save";
+      saveBtn.className = "inline-save-btn";
+      const cancelBtn = document.createElement("button");
+      cancelBtn.textContent = "Cancel";
+      cancelBtn.className = "inline-cancel-btn";
+
+      updateTd.appendChild(saveBtn);
+      updateTd.appendChild(cancelBtn);
+      editorRow.appendChild(updateTd);
+
+      const lastTd = document.createElement("td");
+      editorRow.appendChild(lastTd);
+
+      saveBtn.addEventListener("click", () => {
+        onSave({
+          taskName: nameInput.value,
+          description: descInput.value,
+          owner: ownerInput.value,
+          dueDate: toStorageDateFromInput(dueInput.value),
+          status: statusSelect.value,
+          remarks: remarksInput.value,
+          mondayLink: mondayInput.value
+        });
+      });
+
+      cancelBtn.addEventListener("click", () => {
+        onCancel();
+      });
+
+      return editorRow;
+    }
+
+    function renderAllCategories() {
+      const container = document.getElementById("categoriesContainer");
+      container.innerHTML = "";
+      const grouped = groupByCategory(tasks);
+
+      FIXED_CATEGORIES.forEach(cat => {
+        const section = createCategorySection(cat, grouped[cat] || []);
+        container.appendChild(section);
+      });
+
+      applySearchAndFilter();
+      updateApplyButtonVisibility();
+    }
+
+    function getSelectedTaskIds() {
+      const checked = Array.from(
+        document.querySelectorAll(".task-select-checkbox:checked")
+      );
+      return checked.map(cb => parseInt(cb.dataset.taskId, 10));
+    }
+
+    function updateApplyButtonVisibility() {
+      const applyBtn = document.getElementById("applyActionBtn");
+      const selectedIds = getSelectedTaskIds();
+      applyBtn.style.display = selectedIds.length > 0 ? "inline-block" : "none";
+    }
+
+    function handleSelectionCascade(task, isChecked) {
+      if (task.parentId == null) {
+        const subtasks = document.querySelectorAll(
+          `tr.subtask-row[data-parent-id="${task.id}"]`
+        );
+        subtasks.forEach(row => {
+          const cb = row.querySelector(".task-select-checkbox");
+          if (cb) cb.checked = isChecked;
+        });
+      }
+    }
+
+    function deleteTasks(selectedIds) {
+      const set = new Set(selectedIds);
+      tasks = tasks.filter(t => {
+        if (set.has(t.id)) return false;
+        if (t.parentId && set.has(t.parentId)) return false;
+        return true;
+      });
+      saveTasks();
+      renderAllCategories();
+    }
+
+    function markTasksDone(selectedIds) {
+      const set = new Set(selectedIds);
+      tasks.forEach(t => {
+        if (set.has(t.id)) {
+          t.status = "Done";
+        }
+      });
+      saveTasks();
+      renderAllCategories();
+    }
+
+    function emailTasks(selectedIds) {
+      const selectedTasks = tasks.filter(t => selectedIds.includes(t.id));
+      if (selectedTasks.length === 0) return;
+
+      const owners = Array.from(
+        new Set(
+          selectedTasks
+            .map(t => t.owner || "")
+            .filter(o => o && o.includes("@"))
+        )
+      );
+
+      const subject =
+        "Regd. - Provide updates for the following tasks listed.";
+
+      const lines = selectedTasks.map(t => {
+        const name = t.taskName || "";
+        const desc = t.description || "";
+        const due = toDisplayDate(t.dueDate);
+        return `${name} - ${desc} - ${due}`;
+      });
+
+      const bodyText =
+        "Hi,\\n\\nPlease provide updates for the following tasks:\\n\\n" +
+        lines.join("\\n") +
+        "\\n\\nThanks.";
+
+      const to = owners.join(";");
+
+      const mailtoLink =
+        "mailto:" +
+        encodeURIComponent(to) +
+        "?subject=" +
+        encodeURIComponent(subject) +
+        "&body=" +
+        encodeURIComponent(bodyText);
+
+      window.location.href = mailtoLink;
+    }
+
+    function exportTasksToCSV(selectedIds) {
+      const selectedTasks = tasks.filter(t => selectedIds.includes(t.id));
+      if (selectedTasks.length === 0) return;
+
+      const headers = [
+        "Category",
+        "Task Name",
+        "Description",
+        "Owner",
+        "Due Date",
+        "Status",
+        "Remarks",
+        "Monday.com Link",
+        "Parent Task ID"
+      ];
+
+      const lines = [];
+      lines.push(headers.join(","));
+
+      selectedTasks.forEach(t => {
+        const row = [
+          t.category || "",
+          t.taskName || "",
+          t.description || "",
+          t.owner || "",
+          toDisplayDate(t.dueDate),
+          t.status || "",
+          t.remarks || "",
+          t.mondayLink || "",
+          t.parentId != null ? String(t.parentId) : ""
+        ].map(v => '"' + String(v).replace(/"/g, '""') + '"');
+        lines.push(row.join(","));
+      });
+
+      const csvContent = lines.join("\\n");
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "tasks_export.csv";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    function applySearchAndFilter() {
+      const searchVal = (document.getElementById("globalSearch").value || "").toLowerCase();
+      const filterVal = (document.getElementById("filterInput").value || "").toLowerCase();
+
+      const fromValue = document.getElementById("fromDate").value || "";
+      const toValue = document.getElementById("toDate").value || "";
+      const fromDate = fromValue ? new Date(fromValue) : null;
+      const toDate = toValue ? new Date(toValue) : null;
+
+      document.querySelectorAll("tbody tr").forEach(row => {
+        if (row.classList.contains("inline-editor-row")) return;
+
+        const text = [
+          row.dataset.category,
+          row.dataset.taskName,
+          row.dataset.description,
+          row.dataset.owner,
+          row.dataset.status,
+          row.dataset.remarks
+        ]
+          .join(" ")
+          .toLowerCase();
+
+        let visible = true;
+
+        if (searchVal && !text.includes(searchVal)) {
+          visible = false;
+        }
+
+        if (visible && filterVal && !text.includes(filterVal)) {
+          visible = false;
+        }
+
+        if (visible && (fromDate || toDate)) {
+          const taskDate = parseStorageDate(row.dataset.dueDate || "");
+          if (!taskDate) {
+            visible = false;
+          } else {
+            if (fromDate && taskDate < fromDate) visible = false;
+            if (toDate && taskDate > toDate) visible = false;
+          }
+        }
+
+        row.classList.toggle("hidden-row", !visible);
+      });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderAllCategories();
+
+      // Add Section button event listener
+      document.getElementById("addSectionBtn").addEventListener("click", openAddSectionEditor);
+
+      const actionSelect = document.getElementById("actionSelect");
+      const applyBtn = document.getElementById("applyActionBtn");
+
+      applyBtn.addEventListener("click", () => {
+        const action = actionSelect.value;
+        const selectedIds = getSelectedTaskIds();
+        if (!action || selectedIds.length === 0) return;
+
+        if (action === "delete") {
+          if (confirm("Are you sure you want to delete selected tasks?")) {
+            deleteTasks(selectedIds);
+          }
+        } else if (action === "done") {
+          markTasksDone(selectedIds);
+        } else if (action === "email") {
+          emailTasks(selectedIds);
+        } else if (action === "csv") {
+          exportTasksToCSV(selectedIds);
+        }
+
+        document
+          .querySelectorAll(".task-select-checkbox")
+          .forEach(cb => (cb.checked = false));
+        updateApplyButtonVisibility();
+        actionSelect.value = "";
+      });
+
+      document.getElementById("globalSearch").addEventListener("input", applySearchAndFilter);
+      document.getElementById("filterInput").addEventListener("input", applySearchAndFilter);
+      document.getElementById("fromDate").addEventListener("change", applySearchAndFilter);
+      document.getElementById("toDate").addEventListener("change", applySearchAndFilter);
+    });
+  </script>
+</body>
+</html>
