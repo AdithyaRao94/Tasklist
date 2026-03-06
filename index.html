@@ -833,13 +833,23 @@
       const statusTd = document.createElement("td");
       const statusSelect = document.createElement("select");
       statusSelect.className = "inline-select";
-      ["Not Started", "In Progress", "Done", "Blocked"].forEach(s => {
-        const opt = document.createElement("option");
-        opt.value = s;
-        opt.textContent = "s";
-        if (initial.status === s) opt.selected = true;
-        statusSelect.appendChild(opt);
-      });
+      const statusOptions = [
+  { value: "not started", label: "Yet to start" },
+  { value: "in-progress", label: "In-Progress" },
+  { value: "done", label: "Done" },
+  { value: "blocked", label: "Blocked" }
+];
+
+statusOptions.forEach(opt => {
+  const option = document.createElement("option");
+  option.value = opt.value;
+  option.textContent = opt.label;
+  if (initial.status === opt.value || initial.status?.toLowerCase() === opt.value) {
+    option.selected = true;
+  }
+  statusSelect.appendChild(option);
+});
+
       statusTd.appendChild(statusSelect);
       editorRow.appendChild(statusTd);
 
@@ -1129,4 +1139,5 @@
   </script>
 </body>
 </html>
+
 
