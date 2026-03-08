@@ -324,9 +324,6 @@
   </div>
 
   <script>
-    const STORAGE_KEY = "tasklist_v11_tasks";
-    const CATEGORIES_KEY = "tasklist_v11_categories";
-
     let FIXED_CATEGORIES = [
       "GRC",
       "IAM",
@@ -335,38 +332,15 @@
       "AdHoc Security Task"
     ];
 
-    function loadTasks() {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return [];
-      try {
-        const parsed = JSON.parse(raw);
-        return Array.isArray(parsed) ? parsed : [];
-      } catch {
-        return [];
-      }
+function loadTasks() {
+  return [];
     }
 
     function loadCategories() {
-      const raw = localStorage.getItem(CATEGORIES_KEY);
-      if (!raw) return FIXED_CATEGORIES;
-      try {
-        const parsed = JSON.parse(raw);
-        return Array.isArray(parsed) ? parsed : FIXED_CATEGORIES;
-      } catch {
-        return FIXED_CATEGORIES;
+      return FIXED_CATEGORIES;
       }
-    }
-
-    function saveTasks() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
-    }
-
-    function saveCategories() {
-      localStorage.setItem(CATEGORIES_KEY, JSON.stringify(FIXED_CATEGORIES));
-    }
-
-    let tasks = loadTasks();
-    FIXED_CATEGORIES = loadCategories();
+    let tasks = [];  // Empty array, no load
+FIXED_CATEGORIES = ["GRC", "IAM", "Product Security", "SOC", "AdHoc Security Task"];
 
     // date helpers
     function toDisplayDate(value) {
@@ -716,14 +690,11 @@
     }
 
     function openAddSectionEditor() {
-      const container = document.getElementById("categoriesContainer");
-      
-      // Remove existing section editor if any
-      const existingEditor = container.querySelector(".section-editor-row");
-      if (existingEditor) {
-        existingEditor.remove();
-        return;
-      }
+     if (newCategoryName && !FIXED_CATEGORIES.includes(newCategoryName)) {
+  FIXED_CATEGORIES.push(newCategoryName);
+  // saveCategories();  // Persistence removed
+  renderAllCategories();
+}
 
       const editorDiv = document.createElement("div");
       editorDiv.className = "section-editor-row category-section";
@@ -836,7 +807,7 @@
       const statusOptions = [
   { value: "Not Started", label: "Yet to start" },
   { value: "In-progress", label: "In-Progress" },
-  { value: "Bone", label: "Done" },
+  { value: "Done", label: "Done" },
   { value: "Blocked", label: "Blocked" }
 ];
 
@@ -1139,6 +1110,7 @@ statusOptions.forEach(opt => {
   </script>
 </body>
 </html>
+
 
 
 
